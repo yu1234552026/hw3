@@ -1,29 +1,28 @@
-# How to Contribute
+# 貢獻說明
 
-We'd love to accept your patches and contributions to this project. There are
-just a few small guidelines you need to follow.
+本專案是 Android Basics with Compose 課程作業專案，主要用途為練習 Room、ViewModel、Repository 與自動化測試。
 
-## Contributor License Agreement
+## 提交修改前
 
-Contributions to this project must be accompanied by a Contributor License
-Agreement (CLA). You (or your employer) retain the copyright to your
-contribution; this simply gives us permission to use and redistribute your
-contributions as part of the project. Head over to
-<https://cla.developers.google.com/> to see your current agreements on file or
-to sign a new one.
+請先確認專案可以正常建置，並執行相關測試：
 
-You generally only need to submit a CLA once, so if you've already submitted one
-(even if it was for a different project), you probably don't need to do it
-again.
+```powershell
+.\gradlew.bat :app:testDebugUnitTest
+.\gradlew.bat :app:connectedDebugAndroidTest
+```
 
-## Code reviews
+其中 `connectedDebugAndroidTest` 需要先啟動 Android 模擬器或連接實體裝置。
 
-All submissions, including submissions by project members, require review. We
-use GitHub pull requests for this purpose. Consult
-[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
-information on using pull requests.
+## 程式碼風格
 
-## Community Guidelines
+- Kotlin 程式碼請維持官方 Kotlin code style。
+- 測試名稱需清楚描述測試情境與預期結果。
+- 修改資料庫、Repository 或 ViewModel 行為時，請同步補上對應測試。
 
-This project follows
-[Google's Open Source Community Guidelines](https://opensource.google/conduct/).
+## Pull Request
+
+若要提交 Pull Request，請在說明中簡短列出：
+
+- 修改了哪些功能或測試。
+- 執行過哪些測試。
+- 是否有需要老師或 reviewer 特別注意的版本或環境問題。
