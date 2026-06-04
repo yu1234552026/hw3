@@ -40,6 +40,8 @@ class ItemDaoTest {
     private lateinit var inventoryDatabase: InventoryDatabase
     private val item1 = Item(1, "Apples", 10.0, 20)
     private val item2 = Item(2, "Bananas", 15.0, 97)
+    private val duplicateItem = Item(1, "Apples Duplicate", 12.0, 99)
+    private val studentItem = Item(3, "b11309055", 100.0, 10)
 
     @Before
     fun createDb() {
@@ -105,6 +107,26 @@ class ItemDaoTest {
         val allItems = itemDao.getAllItems().first()
         assertEquals(allItems[0], Item(1, "Apples", 15.0, 25))
         assertEquals(allItems[1], Item(2, "Bananas", 5.0, 50))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoInsert_sameId_ignoresSecondInsert() = runBlocking {
+        itemDao.insert(item1)
+        itemDao.insert(duplicateItem)
+
+        val allItems = itemDao.getAllItems().first()
+        assertEquals(1, allItems.size)
+        assertEquals(item1, allItems[0])
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun daoInsert_studentItem_insertsItemIntoDb() = runBlocking {
+        itemDao.insert(studentItem)
+
+        val insertedItem = itemDao.getItem(studentItem.id).first()
+        assertEquals(studentItem, insertedItem)
     }
 
     private suspend fun addOneItemToDb() {
