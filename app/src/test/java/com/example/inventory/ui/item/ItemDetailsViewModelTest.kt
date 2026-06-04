@@ -19,13 +19,14 @@ package com.example.inventory.ui.item
 import androidx.lifecycle.SavedStateHandle
 import com.example.inventory.data.Item
 import com.example.inventory.data.ItemsRepository
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -48,7 +49,7 @@ class ItemDetailsViewModelTest {
         val repository = FakeItemsRepository(item)
         val viewModel = ItemDetailsViewModel(savedStateHandleForItem(item.id), repository)
 
-        viewModel.uiState.first()
+        viewModel.uiState.first { it.itemDetails.id == item.id }
         viewModel.reduceQuantityByOne()
         advanceUntilIdle()
 
@@ -62,7 +63,7 @@ class ItemDetailsViewModelTest {
         val repository = FakeItemsRepository(item)
         val viewModel = ItemDetailsViewModel(savedStateHandleForItem(item.id), repository)
 
-        viewModel.uiState.first()
+        viewModel.uiState.first { it.itemDetails.id == item.id }
         viewModel.reduceQuantityByOne()
         advanceUntilIdle()
 
@@ -75,7 +76,7 @@ class ItemDetailsViewModelTest {
         val repository = FakeItemsRepository(item)
         val viewModel = ItemDetailsViewModel(savedStateHandleForItem(item.id), repository)
 
-        viewModel.uiState.first()
+        viewModel.uiState.first { it.itemDetails.id == item.id }
         viewModel.deleteItem()
 
         assertEquals(1, repository.deletedItems.size)
@@ -89,7 +90,7 @@ class ItemDetailsViewModelTest {
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainDispatcherRule(
-    private val testDispatcher: CoroutineDispatcher = Dispatchers.Unconfined
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
     override fun starting(description: Description) {
         Dispatchers.setMain(testDispatcher)
